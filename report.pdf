@@ -1,0 +1,237 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Length 3182 >>
+stream
+0.12 0.20 0.32 rg
+0.10 0.24 0.40 rg
+BT /F2 19 Tf 48 794.00 Td (BCHW Tensor Flattening and Reconstruction) Tj ET
+0.13 0.16 0.20 rg
+0.10 0.24 0.40 rg
+BT /F2 13 Tf 48 747.35 Td (Objective) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 710.80 Td (This assignment implements the transformations) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 677.11 Td (B x C x H x W  ->  B x \(C*H*W\)  ->  B x C x H x W) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 644.63 Td (using explicit indexing. The C++ implementation is in tensor_flatten.cpp, and the Python) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 630.94 Td (implementation is in tensor_flatten.py. Neither algorithm uses a library reshape/flatten operation) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 617.25 Td (to perform the required transformations. The Python program also uses NumPy reshape only for the) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 603.56 Td (separately labeled reference check, after the explicit implementation.) Tj ET
+0.10 0.24 0.40 rg
+BT /F2 13 Tf 48 579.87 Td (Index mapping) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 543.32 Td (For BCHW row-major storage, the linear input offset is) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 509.63 Td (input_offset\(b,c,h,w\) = b*\(C*H*W\) + c*\(H*W\) + h*W + w) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 477.16 Td (For the two-dimensional tensor F with shape B x \(CHW\), the corresponding element is) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 443.47 Td (F[b,k] = I[b,c,h,w]) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 430.99 Td (k = c*\(H*W\) + h*W + w) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 398.52 Td (To reconstruct, decode each flattened column index k:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 364.83 Td (c   = k // \(H*W\)) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 352.35 Td (rem = k % \(H*W\)) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 339.88 Td (h   = rem // W) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 327.40 Td (w   = rem % W) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 314.93 Td (I_hat[b,c,h,w] = F[b,k]) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 282.45 Td (The batch index b selects the row and is unchanged by either transformation.) Tj ET
+0.10 0.24 0.40 rg
+BT /F2 11 Tf 48 258.76 Td (Pseudocode) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 216.91 Td (flatten\(I, B, C, H, W\):) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 204.44 Td (allocate F[B][C*H*W]) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 191.96 Td (for b in 0..B-1:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 179.49 Td (for c in 0..C-1:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 167.01 Td (for h in 0..H-1:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 154.54 Td (for w in 0..W-1:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 142.06 Td (k = c*\(H*W\) + h*W + w) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 129.59 Td (F[b][k] = I[b][c][h][w]) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 117.11 Td (return F) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 104.64 Td () Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 92.16 Td (reconstruct\(F, B, C, H, W\):) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 79.69 Td (allocate I_hat[B][C][H][W]) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 67.21 Td (for b in 0..B-1:) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 4614 >>
+stream
+0.12 0.20 0.32 rg
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 794.00 Td (for k in 0..C*H*W-1:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 781.52 Td (c = k // \(H*W\)) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 769.05 Td (rem = k % \(H*W\)) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 756.57 Td (h = rem // W) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 744.10 Td (w = rem % W) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 731.62 Td (I_hat[b][c][h][w] = F[b][k]) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 719.15 Td (return I_hat) Tj ET
+0.10 0.24 0.40 rg
+BT /F2 13 Tf 48 686.67 Td (Manual example) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 650.12 Td (Let B=1, C=2, H=2, W=3. The flattened row contains CHW = 12 elements. Using sample values I[0,c,h,w]) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 636.43 Td (= 100c + 10h + w:) Tj ET
+0.13 0.16 0.20 rg
+BT /F2 8.2 Tf 48 612.74 Td (BCHW element  |  Flattened index `k = c*6 + h*3 + w`  |  Flattened value) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 597.67 Td (BCHW element=`I[0,0,0,0]`  |  Flattened index `k = c*6 + h*3 + w`=0  |  Flattened value=0) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 584.60 Td (BCHW element=`I[0,0,1,2]`  |  Flattened index `k = c*6 + h*3 + w`=5  |  Flattened value=12) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 571.53 Td (BCHW element=`I[0,1,0,0]`  |  Flattened index `k = c*6 + h*3 + w`=6  |  Flattened value=100) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 558.46 Td (BCHW element=`I[0,1,1,2]`  |  Flattened index `k = c*6 + h*3 + w`=11  |  Flattened value=112) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 535.39 Td (Thus the complete flattened row is:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 501.70 Td ([0, 1, 2, 10, 11, 12, 100, 101, 102, 110, 111, 112]) Tj ET
+0.10 0.24 0.40 rg
+BT /F2 13 Tf 48 469.23 Td (Experiments and results) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 432.68 Td (Both programs were run. The C++ program was compiled with g++ -std=c++17 -Wall -Wextra -Wpedantic) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 418.99 Td (-O2. The Python program ran with NumPy. Each implementation generated its own test input; the random) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 405.30 Td (Python tensor values and deterministic C++ values are not intended to be identical. We compared the) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 391.61 Td (reported error measures for the same six tensor shapes.) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 367.92 Td (Dataset note: No MNIST or CIFAR dataset files are loaded by either program. For the first two rows,) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 354.23 Td (the programs generate synthetic tensors with dimensions matching a single-channel 28x28 MNIST image) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 340.54 Td (and a three-channel 32x32 CIFAR image. The remaining inputs are also synthetic feature maps.) Tj ET
+0.13 0.16 0.20 rg
+BT /F2 8.2 Tf 48 316.85 Td (Input  |  B  |  C  |  H  |  W  |  Elements  |  Emax  |  MAE) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 301.78 Td (Synthetic \(MNIST shape\)  |  B=1  |  C=1  |  H=28  |  W=28  |  Elements=784  |  Emax=0.00000  |  MAE=0.00000) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 288.71 Td (Synthetic \(CIFAR shape\)  |  B=1  |  C=3  |  H=32  |  W=32  |  Elements=3,072  |  Emax=0.00000  |  MAE=0.00000) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 275.64 Td (Synthetic feature map 1  |  B=2  |  C=16  |  H=16  |  W=16  |  Elements=8,192  |  Emax=0.00000  |  MAE=0.00000) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 262.57 Td (Synthetic feature map 2  |  B=2  |  C=64  |  H=16  |  W=16  |  Elements=32,768  |  Emax=0.00000  |  MAE=0.00000) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 249.50 Td (Synthetic feature map 3  |  B=2  |  C=128  |  H=16  |  W=16  |  Elements=65,536  |  Emax=0.00000  |  MAE=0.00000) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 8.2 Tf 48 236.43 Td (Synthetic feature map 4  |  B=2  |  C=500  |  H=16  |  W=16  |  Elements=256,000  |  Emax=0.00000  |  MAE=0.00000) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 213.36 Td (The C++ and Python outputs both reported Emax = 0 and MAE = 0 for every case, including the manual) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 199.67 Td (example.) Tj ET
+0.10 0.24 0.40 rg
+BT /F2 13 Tf 48 175.98 Td (Error calculation and discussion) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 139.43 Td (For every element, the programs calculate the absolute difference abs\(I - I_hat\). They report) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 105.74 Td (Emax = maximum absolute difference over all elements) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 93.26 Td (MAE  = sum of absolute differences / number of elements) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 1217 >>
+stream
+0.12 0.20 0.32 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 794.00 Td (Zero errors are the expected result here. Flattening and reconstruction only copy each value to and) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 780.31 Td (from its corresponding index; they do not perform arithmetic on tensor values or change their data) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 766.62 Td (type. The explicit index formulas are inverse mappings, so every tested input element returns to its) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 752.93 Td (original position. This shows no reconstruction loss for these tests; it does not claim that every) Tj ET
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 739.24 Td (conceivable input or implementation is error-free.) Tj ET
+0.10 0.24 0.40 rg
+BT /F2 13 Tf 48 715.55 Td (Reproducing the experiments) Tj ET
+0.13 0.16 0.20 rg
+0.13 0.16 0.20 rg
+BT /F1 9.4 Tf 48 679.00 Td (With a C++17 compiler and NumPy installed:) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 645.31 Td (g++ -std=c++17 -Wall -Wextra -Wpedantic -O2 tensor_flatten.cpp -o tensor_flatten.exe) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 632.83 Td (.\\tensor_flatten.exe) Tj ET
+0.13 0.16 0.20 rg
+BT /F3 8.5 Tf 48 620.36 Td (python tensor_flatten.py) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000134 00000 n 
+0000000231 00000 n 
+0000000333 00000 n 
+0000000428 00000 n 
+0000003662 00000 n 
+0000003808 00000 n 
+0000008474 00000 n 
+0000008620 00000 n 
+0000009890 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+10038
+%%EOF
